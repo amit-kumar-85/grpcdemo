@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package com.example.grpcdemo;
+
+import "google/rpc/status.proto";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpcdemo";
+
+service GreetingService {
+  rpc greeting(GreetingRequest) returns (GreetingResponse) ;
+  rpc greetingSStream(GreetingRequest) returns (stream StreamingGreetingResponse) ;
+  rpc greetingCStream(stream GreetingRequest) returns (GreetingResponse) ;
+  rpc greetingBiDirectional(stream GreetingRequest) returns (stream StreamingGreetingResponse) ;
+}
+
+message GreetingRequest {
+  string message = 1;
+}
+
+message GreetingResponse {
+  string message = 1;
+}
+
+message ErrorResponse {
+  string errorMessage = 1;
+}
+
+message StreamingGreetingResponse {
+  oneof message {
+    GreetingResponse greetingResponse = 1;
+    google.rpc.Status status = 2;
+  }
+}
